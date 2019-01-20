@@ -7,6 +7,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.RumbleLeft;
+import frc.robot.commands.RumbleRight;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -39,4 +46,22 @@ public class OI {
   // Start the command when the button is released and let it run the command
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
+
+  Joystick driveStick = new Joystick(0);
+
+  Button rightRumble = new JoystickButton(driveStick, 1);
+  Button leftRumble = new JoystickButton(driveStick, 2);
+
+  public OI() {
+    leftRumble.whenPressed(new RumbleLeft(1));
+    rightRumble.whenPressed(new RumbleRight(1));
+  }
+
+  public void setRightRumble(double intensity) {
+    driveStick.setRumble(RumbleType.kRightRumble, intensity);
+  }
+
+  public void setLeftRumble(double intensity) {
+    driveStick.setRumble(RumbleType.kLeftRumble, intensity);
+  }
 }
