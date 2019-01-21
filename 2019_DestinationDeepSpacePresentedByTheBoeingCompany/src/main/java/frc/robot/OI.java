@@ -64,4 +64,8 @@ public class OI {
   public void setLeftRumble(double intensity) {
     driveStick.setRumble(RumbleType.kLeftRumble, intensity);
   }
+
+  public Joystick getDrivestick() {
+    return driveStick;
+  }
 }
