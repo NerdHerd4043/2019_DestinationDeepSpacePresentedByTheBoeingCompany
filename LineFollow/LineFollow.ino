@@ -28,17 +28,21 @@ void loop() {
 
   if (leftTriggered && rightTriggered) {
     if (rightReading > 600) {
-      Serial.print("R:");
-      Serial.println(rightReading);
+      digitalWrite(rightOutPin, HIGH);
+      digitalWrite(leftOutPin, LOW);
+//      Serial.print("R:");
+//      Serial.println(rightReading);
     } else if (leftReading > 600) {
-      Serial.print("L:");
-      Serial.println(leftReading);
+      digitalWrite(rightOutPin, LOW);
+      digitalWrite(leftOutPin, HIGH);
+//      Serial.print("L:");
+//      Serial.println(leftReading);
     }
   } else if (rightReading > 600) {
     rightTriggered = true;
-    Serial.println("Right Triggered");
+//    Serial.println("Right Triggered");
   } else if (leftReading > 600) {
     leftTriggered = true;
-    Serial.println("Left Triggered");
+//    Serial.println("Left Triggered");
   }
 }
