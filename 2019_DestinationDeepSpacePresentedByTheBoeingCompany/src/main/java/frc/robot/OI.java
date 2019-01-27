@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.LatchToggleGrab;
+import frc.robot.commands.LatchToggleLocation;
 import frc.robot.commands.RumbleLeft;
 import frc.robot.commands.RumbleRight;
 
@@ -51,10 +53,15 @@ public class OI {
 
   Button rightRumble = new JoystickButton(driveStick, 1);
   Button leftRumble = new JoystickButton(driveStick, 2);
+  Button hatchToggle = new JoystickButton(driveStick, 3);
+  Button hatchInOut = new JoystickButton(driveStick, 4);
 
   public OI() {
     leftRumble.whenPressed(new RumbleLeft(1));
     rightRumble.whenPressed(new RumbleRight(1));
+
+    hatchToggle.whenPressed(new LatchToggleGrab());
+    hatchToggle.whenPressed(new LatchToggleLocation());
   }
 
   public void setRightRumble(double intensity) {
