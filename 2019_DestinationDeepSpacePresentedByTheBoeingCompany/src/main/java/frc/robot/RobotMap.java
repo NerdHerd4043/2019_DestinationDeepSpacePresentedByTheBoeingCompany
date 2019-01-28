@@ -25,5 +25,5 @@ public class RobotMap {
   public static WPI_TalonSRX motorBL = new WPI_TalonSRX(3);
   public static WPI_TalonSRX cargoConv = new WPI_TalonSRX(4);
 
-  public static Solenoid CargoPos = new Solenoid(0);
+  public static Solenoid CargoPos = new Solenoid(0, 8);
 }
