@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.RumbleRumble;
+
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +25,8 @@ import frc.robot.subsystems.RumbleRumble;
 public class Robot extends TimedRobot {
   public static RumbleRumble rumble;
   public static Drivetrain drivetrain;
+  public static HatchLatch hatchLatch;
+  public static CargoIntake cargoIntake;
   
   //ALWAYS INITIALIZE YOUR OI AFTER ALL THE OTHER SUBSYSTEMS
   public static OI m_oi;
@@ -40,7 +42,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     rumble = new RumbleRumble();
     drivetrain = new Drivetrain();
+    hatchLatch = new HatchLatch();
     
+    cargoIntake = new CargoIntake();
+
     m_oi = new OI();
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
