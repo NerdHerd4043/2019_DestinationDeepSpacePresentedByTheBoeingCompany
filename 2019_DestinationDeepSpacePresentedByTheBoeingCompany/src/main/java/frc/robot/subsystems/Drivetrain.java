@@ -43,6 +43,14 @@ public class Drivetrain extends Subsystem {
     diffDrive.arcadeDrive(speed, turn, true);
   }
 
+  public void shift() {
+    RobotMap.shifter.set(true);
+  }
+
+  public void antiShift() {
+    RobotMap.shifter.set(false);
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.

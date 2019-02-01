@@ -22,11 +22,11 @@ public class CargoIntake extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   public void up() {
-    RobotMap.CargoPos.set(true);
+    RobotMap.cargoPos.set(true);
   }
 
   public void down() {
-    RobotMap.CargoPos.set(false);
+    RobotMap.cargoPos.set(false);
   }
 
   public void reverseYeet() {

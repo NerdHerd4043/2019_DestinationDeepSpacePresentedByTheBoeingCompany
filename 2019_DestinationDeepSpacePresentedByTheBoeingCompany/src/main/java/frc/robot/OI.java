@@ -56,6 +56,8 @@ public class OI {
 
   POVButton CUp = new POVButton(driveStick, 1);
   POVButton CDown = new POVButton(driveStick, 5);
+  POVButton ShiftBtn = new POVButton(driveStick, 3);
+  POVButton AntiShiftBtn = new POVButton(driveStick, 7);
   Button CIn = new JoystickButton(driveStick, 1);
   Button COut = new JoystickButton(driveStick, 5);
 
@@ -67,7 +69,8 @@ public class OI {
     hatchToggle.whenPressed(new LatchToggleLocation());
     CUp.whenPressed(new CargoUp());
     CDown.whenPressed(new CargoDown());
-
+    ShiftBtn.whenPressed(new Shift());
+    AntiShiftBtn.whenPressed(new AntiShift());
   }
 
   public void setRightRumble(double intensity) {
