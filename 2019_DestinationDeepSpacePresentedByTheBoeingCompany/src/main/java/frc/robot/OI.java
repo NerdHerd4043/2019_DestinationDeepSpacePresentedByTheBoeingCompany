@@ -59,7 +59,8 @@ public class OI {
   POVButton ShiftBtn = new POVButton(driveStick, 3);
   POVButton AntiShiftBtn = new POVButton(driveStick, 7);
   Button CIn = new JoystickButton(driveStick, 1);
-  Button COut = new JoystickButton(driveStick, 5);
+  // Currently no way to reverse the cargo intake, this button will be for that in the future.
+  // Button COut = new JoystickButton(driveStick, 5); 
 
   public OI() {
     leftRumble.whenPressed(new RumbleLeft(1));
@@ -71,6 +72,7 @@ public class OI {
     CDown.whenPressed(new CargoDown());
     ShiftBtn.whenPressed(new Shift());
     AntiShiftBtn.whenPressed(new AntiShift());
+    CIn.toggleWhenPressed(new Yeet());
   }
 
   public void setRightRumble(double intensity) {

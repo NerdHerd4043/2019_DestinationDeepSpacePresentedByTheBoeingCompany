@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -27,6 +28,8 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static HatchLatch hatchLatch;
   public static CargoIntake cargoIntake;
+
+  public static DigitalInput cLimit;
   
   //ALWAYS INITIALIZE YOUR OI AFTER ALL THE OTHER SUBSYSTEMS
   public static OI m_oi;
@@ -45,6 +48,8 @@ public class Robot extends TimedRobot {
     hatchLatch = new HatchLatch();
     
     cargoIntake = new CargoIntake();
+
+    cLimit = new DigitalInput(0);
 
     m_oi = new OI();
     // chooser.addOption("My Auto", new MyAutoCommand());

@@ -9,14 +9,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.SetYeet;
 
 
 /**
  * Add your docs here.
  */
 public class CargoIntake extends Subsystem {
-  private boolean cargoUp = false;
+  // private boolean cargoUp = false;
 
 
   // Put methods for controlling this subsystem
@@ -30,30 +29,33 @@ public class CargoIntake extends Subsystem {
   }
 
   public void reverseYeet() {
-    cargoUp = false;
+    // cargoUp = false;
     RobotMap.cargoConv.set(-0.5);
+  }
+
+  public void yeet() {
+    RobotMap.cargoConv.set(0.5);
   }
 
   public void stopYeet() {
     RobotMap.cargoConv.set(0);
   }
 
-  public void switchYeet() {
-    cargoUp = !cargoUp;
-  }
+  // public void switchYeet() {
+  //   cargoUp = !cargoUp;
+  // }
 
-  public void setYeet() {
-    if (cargoUp) {
-      RobotMap.cargoConv.set(0.5);  
-    } else {
-      RobotMap.cargoConv.set(0);  
-    }
-  }
+  // public void setYeet() {
+  //   if (cargoUp) {
+  //     RobotMap.cargoConv.set(0.5);  
+  //   } else {
+  //     RobotMap.cargoConv.set(0);  
+  //   }
+  // }
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new SetYeet());
   }
 }
