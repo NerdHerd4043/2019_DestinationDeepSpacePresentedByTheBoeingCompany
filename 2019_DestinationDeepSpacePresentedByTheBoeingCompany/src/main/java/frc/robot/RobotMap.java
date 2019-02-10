@@ -18,9 +18,9 @@ public class RobotMap {
   public static WPI_TalonSRX motorBR = new WPI_TalonSRX(12);
   public static WPI_TalonSRX motorBL = new WPI_TalonSRX(15);
 
-  public static Solenoid hatchGrab = new Solenoid(0, 0);
-  public static Solenoid hatchMove = new Solenoid(0, 1);
+  public static Solenoid hatchGrab = new Solenoid(7, 0);
+  public static Solenoid hatchMove = new Solenoid(7, 1);
   public static WPI_TalonSRX cargoConv = new WPI_TalonSRX(2);
 
-  public static Solenoid CargoPos = new Solenoid(0, 8);
+  public static Solenoid CargoPos = new Solenoid(7, 8);
 }
