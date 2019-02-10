@@ -24,7 +24,7 @@ import frc.robot.subsystems.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static RumbleRumble rumble;
+
   public static Drivetrain drivetrain;
   public static HatchLatch hatchLatch;
   public static CargoIntake cargoIntake;
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    rumble = new RumbleRumble();
+    
     drivetrain = new Drivetrain();
     hatchLatch = new HatchLatch();
     
