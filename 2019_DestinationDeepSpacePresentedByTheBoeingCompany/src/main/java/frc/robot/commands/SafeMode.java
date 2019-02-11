@@ -10,22 +10,16 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class DriverAssist extends Command {
-  int mode;
-
-  public DriverAssist(int mode) {
+public class SafeMode extends Command {
+  public SafeMode() {
     // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.drivetrain);
-    this.mode = mode;
+    requires(Robot.hatchLatch);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_oi.setLeftRumble(.25);
-    Robot.m_oi.setRightRumble(.25);
-    
+    Robot.hatchLatch.safeMode();
   }
 
   // Called repeatedly when this Command is scheduled to run

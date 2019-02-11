@@ -28,6 +28,11 @@ public class HatchLatch extends Subsystem {
     RobotMap.hatchMove.set(latchLocation);
   }
 
+  public void safeMode() {
+    latchState = false;
+    latchLocation = false;
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
