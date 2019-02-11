@@ -7,25 +7,27 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import frc.robot.Robot;
 
-public class DriverAssist extends Command {
-  int mode;
-
-  public DriverAssist(int mode) {
+/**
+ * Add your docs here.
+ */
+public class RumbleLeft extends TimedCommand {
+  /**
+   * Add your docs here.
+   */
+  public RumbleLeft(double timeout) {
+    super(timeout);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    requires(Robot.drivetrain);
-    this.mode = mode;
+    requires(Robot.rumble);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_oi.setLeftRumble(.3);
-    Robot.m_oi.setRightRumble(.3);
-    
+    Robot.rumble.rumbleLeft();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -33,20 +35,29 @@ public class DriverAssist extends Command {
   protected void execute() {
   }
 
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return false;
-  }
-
-  // Called once after isFinished returns true
+  // Called once after timeout
   @Override
   protected void end() {
+    Robot.rumble.stopRumble();
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      System.out.println("INTERRRUPTED");
+    }
+    Robot.rumble.rumbleRight();
+    Robot.rumble.rumbleLeft();
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      System.out.println("INTERRRUPTED");
+    }
+    Robot.rumble.stopRumble();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.rumble.stopRumble();
   }
 }

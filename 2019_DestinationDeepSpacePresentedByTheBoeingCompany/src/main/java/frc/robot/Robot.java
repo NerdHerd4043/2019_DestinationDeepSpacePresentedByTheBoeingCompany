@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static HatchLatch hatchLatch;
   public static CargoIntake cargoIntake;
-
+  public static RumbleRumble rumble;
   public static DigitalInput cLimit;
   
   //ALWAYS INITIALIZE YOUR OI AFTER ALL THE OTHER SUBSYSTEMS
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     
     drivetrain = new Drivetrain();
     hatchLatch = new HatchLatch();
-    
+    rumble = new RumbleRumble();
     cargoIntake = new CargoIntake();
 
     cLimit = new DigitalInput(0);
