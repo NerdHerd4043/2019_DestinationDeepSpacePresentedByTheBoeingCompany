@@ -34,7 +34,7 @@ public class Drivetrain extends Subsystem {
 
   public void drive(Joystick joy) {
     inputSpeed = -joy.getRawAxis(1);
-    inputTurn = -joy.getRawAxis(4);
+    inputTurn = joy.getRawAxis(4);
 
     drive(inputSpeed, inputTurn);
   }
