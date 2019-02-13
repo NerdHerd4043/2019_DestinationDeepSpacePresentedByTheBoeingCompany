@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.buttons.POVButton;
+// import edu.wpi.first.wpilibj.buttons.POVButton;
 import frc.robot.commands.*;
 
 /**
@@ -51,19 +51,14 @@ public class OI {
 
   Button hatchToggle = new JoystickButton(driveStick, 3);
   Button hatchInOut = new JoystickButton(driveStick, 4);
-  Button rightRumble = new JoystickButton(driveStick, 9);
-  Button leftRumble = new JoystickButton(driveStick, 10);
 
-  POVButton ShiftBtn = new POVButton(driveStick, 3);
-  POVButton AntiShiftBtn = new POVButton(driveStick, 7);
+  Button ShiftBtn = new JoystickButton(driveStick, 5);
+  Button AntiShiftBtn = new JoystickButton(driveStick, 6);
   Button CIn = new JoystickButton(driveStick, 1);
   // Currently no way to reverse the cargo intake, this button will be for that in the future.
   // Button COut = new JoystickButton(driveStick, 5); 
 
   public OI() {
-    leftRumble.whenPressed(new RumbleLeft(1));
-    rightRumble.whenPressed(new RumbleRight(1));
-
     hatchToggle.whenPressed(new LatchToggleGrab());
     hatchInOut.whenPressed(new LatchToggleLocation());
     ShiftBtn.whenPressed(new Shift());
