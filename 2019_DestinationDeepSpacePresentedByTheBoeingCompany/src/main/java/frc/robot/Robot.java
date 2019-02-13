@@ -74,6 +74,9 @@ public class Robot extends TimedRobot {
 
     cLimit = new DigitalInput(0);
 
+    RobotMap.hatchGrab.set(false);
+    RobotMap.hatchMove.set(false);
+
     ShuffleboardTab shuffTab = Shuffleboard.getTab("Drive");
 
     collisionDetection = shuffTab
