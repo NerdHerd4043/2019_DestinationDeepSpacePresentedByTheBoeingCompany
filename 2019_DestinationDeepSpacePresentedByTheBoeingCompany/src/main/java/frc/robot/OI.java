@@ -65,7 +65,7 @@ public class OI {
     rightRumble.whenPressed(new RumbleRight(1));
 
     hatchToggle.whenPressed(new LatchToggleGrab());
-    hatchToggle.whenPressed(new LatchToggleLocation());
+    hatchInOut.whenPressed(new LatchToggleLocation());
     ShiftBtn.whenPressed(new Shift());
     AntiShiftBtn.whenPressed(new AntiShift());
     CIn.toggleWhenPressed(new Yeet());

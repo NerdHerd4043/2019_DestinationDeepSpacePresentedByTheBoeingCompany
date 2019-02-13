@@ -95,12 +95,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    if (collisionDetection.getBoolean(true)) {
-      getJerk();
-      if (collisionDetected) {
-        new SafeMode();
-      }
-    }
+    // if (collisionDetection.getBoolean(true)) {
+    //   getJerk();
+    //   if (collisionDetected) {
+    //     new SafeMode();
+    //   }
+    // }
   }
 
   public void getJerk() {
