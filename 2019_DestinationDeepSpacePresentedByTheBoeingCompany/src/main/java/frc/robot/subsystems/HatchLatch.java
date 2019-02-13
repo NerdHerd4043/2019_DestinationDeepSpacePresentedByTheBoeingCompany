@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.SetHatchLatch;
 
 /**
  * Add your docs here.
@@ -19,9 +18,15 @@ public class HatchLatch extends Subsystem {
   private boolean latchState = false;
   private boolean latchLocation = flase;
 
-  public void toggleState() { latchState = !latchState; }
+  public void toggleState() { 
+    latchState = !latchState; 
+    setLatch();
+  }
 
-  public void toggleLocation() { latchLocation = !latchLocation; }
+  public void toggleLocation() { 
+    latchLocation = !latchLocation;
+    setLatch(); 
+  }
 
   public void setLatch() { 
     RobotMap.hatchGrab.set(latchState);
@@ -37,6 +42,6 @@ public class HatchLatch extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(new SetHatchLatch());
+    // setDefaultCommand(new SetHatchLatch());
   }
 }

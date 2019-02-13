@@ -30,11 +30,16 @@ public class Drivetrain extends Subsystem {
 
     RobotMap.motorBL.follow(RobotMap.motorFL);
     RobotMap.motorBR.follow(RobotMap.motorFR);
+
+    RobotMap.motorBL.setSafetyEnabled(false);
+    RobotMap.motorFL.setSafetyEnabled(false);
+    RobotMap.motorBR.setSafetyEnabled(false);
+    RobotMap.motorFR.setSafetyEnabled(false);
   }
 
   public void drive(Joystick joy) {
     inputSpeed = -joy.getRawAxis(1);
-    inputTurn = -joy.getRawAxis(4);
+    inputTurn = joy.getRawAxis(4);
 
     drive(inputSpeed, inputTurn);
   }

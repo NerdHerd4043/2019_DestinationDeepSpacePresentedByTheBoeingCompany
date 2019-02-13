@@ -74,6 +74,9 @@ public class Robot extends TimedRobot {
 
     cLimit = new DigitalInput(0);
 
+    RobotMap.hatchGrab.set(false);
+    RobotMap.hatchMove.set(false);
+
     ShuffleboardTab shuffTab = Shuffleboard.getTab("Drive");
 
     collisionDetection = shuffTab
@@ -95,12 +98,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    if (collisionDetection.getBoolean(true)) {
-      getJerk();
-      if (collisionDetected) {
-        new SafeMode();
-      }
-    }
+    // if (collisionDetection.getBoolean(true)) {
+    //   getJerk();
+    //   if (collisionDetected) {
+    //     new SafeMode();
+    //   }
+    // }
   }
 
   public void getJerk() {
