@@ -33,12 +33,14 @@ public class Yeet extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    System.out.println(Robot.cLimit.get());
     return Robot.cLimit.get();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    System.out.println("stop yeet");
     Robot.cargoIntake.stopYeet();
   }
 
