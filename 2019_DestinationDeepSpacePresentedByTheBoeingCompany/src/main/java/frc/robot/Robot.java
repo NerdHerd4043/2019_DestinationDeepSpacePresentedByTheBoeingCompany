@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;   
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
@@ -43,6 +44,10 @@ public class Robot extends TimedRobot {
   public static AHRS ahrs;
 
   public static NetworkTableEntry collisionDetection;
+  public static NetworkTableEntry arcadeDrive;
+  public static NetworkTableEntry hatchExtend;
+  public static NetworkTableEntry hatchOpen;
+
 
   public static double currAccelX;
   public static double lastAccelX;
@@ -83,6 +88,23 @@ public class Robot extends TimedRobot {
       .add("Squared Inputs", true)
       .withWidget(BuiltInWidgets.kToggleButton)
       .getEntry();
+
+    arcadeDrive = shuffTab
+      .add("Arcade Drive", true) 
+      .withWidget(BuiltInWidgets.kToggleButton)
+      .getEntry();
+
+    hatchOpen = shuffTab
+      .add("HatchOpen", false) 
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .getEntry();
+
+    hatchExtend = shuffTab
+      .add("HatchExtend", false) 
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .getEntry();  
+
+    CameraServer.getInstance().startAutomaticCapture();
 
     m_oi = new OI();
 

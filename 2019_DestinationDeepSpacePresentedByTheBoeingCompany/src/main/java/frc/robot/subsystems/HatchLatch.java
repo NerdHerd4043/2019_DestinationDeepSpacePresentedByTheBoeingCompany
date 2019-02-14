@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -31,6 +32,9 @@ public class HatchLatch extends Subsystem {
   public void setLatch() { 
     RobotMap.hatchGrab.set(latchState);
     RobotMap.hatchMove.set(latchLocation);
+
+    Robot.hatchOpen.setBoolean(latchState);
+    Robot.hatchExtend.setBoolean(latchLocation);    
   }
 
   public void safeMode() {

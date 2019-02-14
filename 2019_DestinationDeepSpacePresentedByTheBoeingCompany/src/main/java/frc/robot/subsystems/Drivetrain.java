@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.Drive;
 
@@ -38,14 +39,23 @@ public class Drivetrain extends Subsystem {
   }
 
   public void drive(Joystick joy) {
-    inputSpeed = -joy.getRawAxis(1);
-    inputTurn = joy.getRawAxis(4);
+    if (Robot.arcadeDrive.getBoolean(true)) {
+      inputSpeed = -joy.getRawAxis(1);
+      inputTurn = joy.getRawAxis(4);
+    } else {
+      inputSpeed = -joy.getRawAxis(1);
+      inputTurn = -joy.getRawAxis(5);
+    }
 
     drive(inputSpeed, inputTurn);
   }
 
   public void drive(double speed, double turn) {
-    diffDrive.arcadeDrive(speed, turn, true);
+    if (Robot.arcadeDrive.getBoolean(true)) {
+      diffDrive.arcadeDrive(speed, turn, true);
+    } else {
+      diffDrive.tankDrive(speed, turn, true);
+    }
   }
 
   public void shift() {
