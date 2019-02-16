@@ -8,50 +8,31 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
-
 
 /**
  * Add your docs here.
  */
-public class CargoIntake extends Subsystem {
-  // private boolean cargoUp = false;
-
-
+public class Climber extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  public void up() {
-    // RobotMap.cargoPos.set(true);
+
+  public void frontKvinExtend() {
+    RobotMap.frontKvin.set(true);
   }
 
-  public void down() {
-    // RobotMap.cargoPos.set(false);
+  public void frontKvinRetract() {
+    RobotMap.frontKvin.set(false);
+  } 
+
+  public void backKvinExtend() {
+    RobotMap.backKvin.set(true);
   }
 
-  public void antiYeet() {
-    // cargoUp = false;
-    RobotMap.cargoConv.set(0.65);
+  public void backKvinRetract() {
+    RobotMap.backKvin.set(false);
   }
-
-  public void yeet() {
-    RobotMap.cargoConv.set(-0.65);  
-  }
-
-  public void stopYeet() {
-    RobotMap.cargoConv.set(0);
-  }
-
-  // public void switchYeet() {
-  //   cargoUp = !cargoUp;
-  // }
-
-  // public void setYeet() {
-  //   if (cargoUp) {
-  //     RobotMap.cargoConv.set(0.5);  
-  //   } else {
-  //     RobotMap.cargoConv.set(0);  
-  //   }
-  // }
 
   @Override
   public void initDefaultCommand() {

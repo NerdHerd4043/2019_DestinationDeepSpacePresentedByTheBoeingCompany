@@ -7,22 +7,22 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.TimedRobot;
-
-// import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
+import com.kauailabs.navx.frc.AHRS;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;   
 
-import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
-import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.TimedRobot;
+// import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-import frc.robot.commands.SafeMode;
 import frc.robot.subsystems.*;
 
 /**
@@ -37,12 +37,17 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static HatchLatch hatchLatch;
   public static CargoIntake cargoIntake;
+  public static Climber climber;
 
   public static DigitalInput cLimit;
 
   public static AHRS ahrs;
 
   public static NetworkTableEntry collisionDetection;
+  public static NetworkTableEntry arcadeDrive;
+  public static NetworkTableEntry hatchExtend;
+  public static NetworkTableEntry hatchOpen;
+
 
   public static double currAccelX;
   public static double lastAccelX;
@@ -72,7 +77,12 @@ public class Robot extends TimedRobot {
     
     cargoIntake = new CargoIntake();
 
+    climber = new Climber();
+
     cLimit = new DigitalInput(0);
+
+    RobotMap.hatchGrab.set(false);
+    RobotMap.hatchMove.set(false);
 
     ShuffleboardTab shuffTab = Shuffleboard.getTab("Drive");
 
@@ -80,6 +90,24 @@ public class Robot extends TimedRobot {
       .add("Squared Inputs", true)
       .withWidget(BuiltInWidgets.kToggleButton)
       .getEntry();
+
+    arcadeDrive = shuffTab
+      .add("Arcade Drive", true) 
+      .withWidget(BuiltInWidgets.kToggleButton)
+      .getEntry();
+
+    hatchOpen = shuffTab
+      .add("HatchOpen", false) 
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .getEntry();
+
+    hatchExtend = shuffTab
+      .add("HatchExtend", false) 
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .getEntry();  
+
+    CameraServer.getInstance().startAutomaticCapture("Forward Cam", 0);
+    CameraServer.getInstance().startAutomaticCapture("Other Cam", 1);
 
     m_oi = new OI();
 
@@ -95,12 +123,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    if (collisionDetection.getBoolean(true)) {
-      getJerk();
-      if (collisionDetected) {
-        new SafeMode();
-      }
-    }
+    // if (collisionDetection.getBoolean(true)) {
+    //   getJerk();
+    //   if (collisionDetected) {
+    //     new SafeMode();
+    //   }
+    // }
   }
 
   public void getJerk() {
@@ -147,6 +175,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    hatchLatch.reset();
+
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -168,10 +198,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
   }
 
   /**
