@@ -21,7 +21,7 @@ public class Yeet extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    // System.out.println("YEET");
+    System.out.println("YEET");
     Robot.cargoIntake.yeet();
   }
 
@@ -41,7 +41,7 @@ public class Yeet extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    // System.out.println("stop yeet");
+    System.out.println("stop yeet");
     Robot.cargoIntake.stopYeet();
   }
 

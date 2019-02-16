@@ -29,30 +29,17 @@ public class HatchLatch extends Subsystem {
     setLatch(); 
   }
 
-  public void reset() {
-    latchLocation = false;
-    latchState = false; 
-
-    updateShuffleBoard();
-  }
-
-  void updateShuffleBoard() {
-    Robot.hatchOpen.setBoolean(latchState);
-    Robot.hatchExtend.setBoolean(latchLocation);
-  }
-
   public void setLatch() { 
     RobotMap.hatchGrab.set(latchState);
     RobotMap.hatchMove.set(latchLocation);
 
-    updateShuffleBoard();
+    Robot.hatchOpen.setBoolean(latchState);
+    Robot.hatchExtend.setBoolean(latchLocation);    
   }
 
   public void safeMode() {
     latchState = false;
     latchLocation = false;
-
-    updateShuffleBoard();
   }
 
   @Override
