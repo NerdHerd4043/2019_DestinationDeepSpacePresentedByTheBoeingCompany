@@ -21,7 +21,7 @@ public class LatchToggleLocation extends Command {
   @Override
   protected void initialize() {
     Robot.hatchLatch.toggleLocation();
-    System.out.println("in-out toggle");
+    // System.out.println("in-out toggle");
   }
 
   // Called repeatedly when this Command is scheduled to run

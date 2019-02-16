@@ -27,7 +27,7 @@ public class SetHatchLatch extends Command {
   @Override
   protected void execute() {
     Robot.hatchLatch.setLatch();
-    System.out.println("Setting latch");
+    // System.out.println("Setting latch");
   }
 
   // Make this return true when this Command no longer needs to run execute()
