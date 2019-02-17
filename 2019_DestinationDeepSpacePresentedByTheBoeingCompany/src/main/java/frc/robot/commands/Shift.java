@@ -24,7 +24,7 @@ public class Shift extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    System.out.println("Shift");
+    // System.out.println("Shift");
     Robot.drivetrain.shift();
   }
 

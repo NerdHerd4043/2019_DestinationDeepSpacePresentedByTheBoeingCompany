@@ -54,9 +54,12 @@ public class OI {
 
   Button ShiftBtn = new JoystickButton(driveStick, 5);
   Button AntiShiftBtn = new JoystickButton(driveStick, 6);
+
   Button CIn = new JoystickButton(driveStick, 1);
-  // Currently no way to reverse the cargo intake, this button will be for that in the future.
-  // Button COut = new JoystickButton(driveStick, 5); 
+  Button COut = new JoystickButton(driveStick, 2); 
+
+  Button FrontKvin = new JoystickButton(driveStick, 7); 
+  Button BackKvin = new JoystickButton(driveStick, 8); 
 
   public OI() {
     hatchToggle.whenPressed(new LatchToggleGrab());
@@ -64,6 +67,9 @@ public class OI {
     ShiftBtn.whenPressed(new Shift());
     AntiShiftBtn.whenPressed(new AntiShift());
     CIn.toggleWhenPressed(new Yeet());
+    COut.toggleWhenPressed(new AntiYeet());
+    FrontKvin.toggleWhenPressed(new FrontKvinToggle());
+    BackKvin.toggleWhenPressed(new BackKvinToggle());
   }
 
   public void setRightRumble(double intensity) {
