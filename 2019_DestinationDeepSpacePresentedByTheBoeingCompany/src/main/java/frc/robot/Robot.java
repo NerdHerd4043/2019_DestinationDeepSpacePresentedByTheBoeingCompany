@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.subsystems.*;
+import frc.robot.commands.SafeMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -79,7 +80,7 @@ public class Robot extends TimedRobot {
 
     climber = new Climber();
 
-    cLimit = new DigitalInput(0);
+    cLimit = new DigitalInput(9);
 
     RobotMap.hatchGrab.set(false);
     RobotMap.hatchMove.set(false);
@@ -87,7 +88,7 @@ public class Robot extends TimedRobot {
     ShuffleboardTab shuffTab = Shuffleboard.getTab("Drive");
 
     collisionDetection = shuffTab
-      .add("Squared Inputs", true)
+      .add("Collision Detectkion", true)
       .withWidget(BuiltInWidgets.kToggleButton)
       .getEntry();
 
@@ -123,12 +124,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // if (collisionDetection.getBoolean(true)) {
-    //   getJerk();
-    //   if (collisionDetected) {
-    //     new SafeMode();
-    //   }
-    // }
+    if (collisionDetection.getBoolean(true)) {
+      getJerk();
+      if (collisionDetected) {
+        new SafeMode();
+      }
+    }
   }
 
   public void getJerk() {
@@ -141,10 +142,13 @@ public class Robot extends TimedRobot {
     currAccelY = ahrs.getWorldLinearAccelY();
     currentJerkY = currAccelY - lastAccelY;
     lastAccelY = currAccelY;
+    // System.out.println(currentJerkX);
+    // System.out.println(currentJerkY);
     
     if ( ( Math.abs(currentJerkX) > jerkThreshold ) ||
           ( Math.abs(currentJerkY) > jerkThreshold) ) {
         collisionDetected = true;
+        // System.out.println(collisionDetected);
     }
   }
 
@@ -193,7 +197,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    // Scheduler.getInstance().run();
+    teleopPeriodic();
   }
 
   @Override

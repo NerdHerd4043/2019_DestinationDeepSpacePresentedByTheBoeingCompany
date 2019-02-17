@@ -30,11 +30,11 @@ public class CargoIntake extends Subsystem {
 
   public void antiYeet() {
     // cargoUp = false;
-    RobotMap.cargoConv.set(0.65);
+    RobotMap.cargoConv.set(1);
   }
 
   public void yeet() {
-    RobotMap.cargoConv.set(-0.65);  
+    RobotMap.cargoConv.set(-1);  
   }
 
   public void stopYeet() {
