@@ -9,6 +9,9 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
+
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;   
 
@@ -49,6 +52,10 @@ public class Robot extends TimedRobot {
   public static NetworkTableEntry hatchExtend;
   public static NetworkTableEntry hatchOpen;
 
+  public static CameraServer inst;
+  public static MjpegServer server;
+  public static UsbCamera usobo1;
+  public static UsbCamera usobo2;
 
   public static double currAccelX;
   public static double lastAccelX;
@@ -88,27 +95,54 @@ public class Robot extends TimedRobot {
     ShuffleboardTab shuffTab = Shuffleboard.getTab("Drive");
 
     collisionDetection = shuffTab
-      .add("Collision Detectkion", true)
+      .add("Collision Detection", false)
       .withWidget(BuiltInWidgets.kToggleButton)
+      .withPosition(0, 3)
       .getEntry();
 
     arcadeDrive = shuffTab
       .add("Arcade Drive", true) 
       .withWidget(BuiltInWidgets.kToggleButton)
+      .withPosition(0, 2)
       .getEntry();
 
     hatchOpen = shuffTab
       .add("HatchOpen", false) 
       .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(0, 1)
       .getEntry();
 
     hatchExtend = shuffTab
       .add("HatchExtend", false) 
       .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(0, 0)
       .getEntry();  
 
-    CameraServer.getInstance().startAutomaticCapture("Forward Cam", 0);
-    CameraServer.getInstance().startAutomaticCapture("Other Cam", 1);
+    CameraServer inst = CameraServer.getInstance();
+
+    usobo1 = new UsbCamera("Forward Cam", 0);
+    inst.addCamera(usobo1);
+    usobo2 = new UsbCamera("Other Cam", 1);
+    inst.addCamera(usobo2);
+
+    server = inst.addServer("serve_USB Camera 0");
+    server.setSource(usobo1);
+    server.getProperty("compression").set(-1);
+
+    shuffTab
+      .add("Forward Cam", usobo1)
+      .withWidget(BuiltInWidgets.kCameraStream)
+      .withPosition(1, 0)
+      .withSize(5, 4);  
+
+    // shuffTab
+    //   .add("Other Cam", usobo2)
+    //   .withWidget(BuiltInWidgets.kCameraStream)
+    //   .withPosition(6, 0)
+    //   .withSize(4, 4);
+
+    // CameraServer.getInstance().startAutomaticCapture("Forward Cam", 0);
+    // CameraServer.getInstance().startAutomaticCapture("Other Cam", 1);
 
     m_oi = new OI();
 

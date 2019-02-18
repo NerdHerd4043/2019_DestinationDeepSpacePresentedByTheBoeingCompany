@@ -61,7 +61,10 @@ public class OI {
   Button FrontKvin = new JoystickButton(driveStick, 7); 
   Button BackKvin = new JoystickButton(driveStick, 8); 
 
+  Button CameraToggle = new JoystickButton(driveStick, 10);
+
   public OI() {
+    CameraToggle.toggleWhenPressed(new ToggleCam());
     hatchToggle.whenPressed(new LatchToggleGrab());
     hatchInOut.whenPressed(new LatchToggleLocation());
     ShiftBtn.whenPressed(new Shift());
