@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.RumbleLeft;
-import frc.robot.commands.RumbleRight;
+// import edu.wpi.first.wpilibj.buttons.POVButton;
+import frc.robot.commands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -49,12 +49,30 @@ public class OI {
 
   Joystick driveStick = new Joystick(0);
 
-  Button rightRumble = new JoystickButton(driveStick, 1);
-  Button leftRumble = new JoystickButton(driveStick, 2);
+  Button hatchToggle = new JoystickButton(driveStick, 3);
+  Button hatchInOut = new JoystickButton(driveStick, 4);
+
+  Button ShiftBtn = new JoystickButton(driveStick, 5);
+  Button AntiShiftBtn = new JoystickButton(driveStick, 6);
+
+  Button CIn = new JoystickButton(driveStick, 1);
+  Button COut = new JoystickButton(driveStick, 2); 
+
+  Button FrontKvin = new JoystickButton(driveStick, 7); 
+  Button BackKvin = new JoystickButton(driveStick, 8); 
+
+  Button CameraToggle = new JoystickButton(driveStick, 10);
 
   public OI() {
-    leftRumble.whenPressed(new RumbleLeft(1));
-    rightRumble.whenPressed(new RumbleRight(1));
+    CameraToggle.toggleWhenPressed(new ToggleCam());
+    hatchToggle.whenPressed(new LatchToggleGrab());
+    hatchInOut.whenPressed(new LatchToggleLocation());
+    ShiftBtn.whenPressed(new Shift());
+    AntiShiftBtn.whenPressed(new AntiShift());
+    CIn.toggleWhenPressed(new Yeet());
+    COut.toggleWhenPressed(new AntiYeet());
+    FrontKvin.toggleWhenPressed(new FrontKvinToggle());
+    BackKvin.toggleWhenPressed(new BackKvinToggle());
   }
 
   public void setRightRumble(double intensity) {
