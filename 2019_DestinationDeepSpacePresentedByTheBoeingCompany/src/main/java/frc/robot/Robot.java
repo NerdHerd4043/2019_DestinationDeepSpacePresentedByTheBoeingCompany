@@ -7,23 +7,27 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.TimedRobot;
+import com.kauailabs.navx.frc.AHRS;
 
-// import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;   
 
-import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SPI;
-import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.TimedRobot;
+// import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
-import frc.robot.commands.SafeMode;
 import frc.robot.subsystems.*;
+import frc.robot.commands.SafeMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -37,12 +41,22 @@ public class Robot extends TimedRobot {
   public static Drivetrain drivetrain;
   public static HatchLatch hatchLatch;
   public static CargoIntake cargoIntake;
+  public static Climber climber;
   public static RumbleRumble rumble;
+
   public static DigitalInput cLimit;
 
   public static AHRS ahrs;
 
   public static NetworkTableEntry collisionDetection;
+  public static NetworkTableEntry arcadeDrive;
+  public static NetworkTableEntry hatchExtend;
+  public static NetworkTableEntry hatchOpen;
+
+  public static CameraServer inst;
+  public static MjpegServer server;
+  public static UsbCamera usobo1;
+  public static UsbCamera usobo2;
 
   public static double currAccelX;
   public static double lastAccelX;
@@ -72,7 +86,9 @@ public class Robot extends TimedRobot {
     rumble = new RumbleRumble();
     cargoIntake = new CargoIntake();
 
-    cLimit = new DigitalInput(0);
+    climber = new Climber();
+
+    cLimit = new DigitalInput(9);
 
     RobotMap.hatchGrab.set(false);
     RobotMap.hatchMove.set(false);
@@ -80,9 +96,54 @@ public class Robot extends TimedRobot {
     ShuffleboardTab shuffTab = Shuffleboard.getTab("Drive");
 
     collisionDetection = shuffTab
-      .add("Squared Inputs", true)
+      .add("Collision Detection", false)
       .withWidget(BuiltInWidgets.kToggleButton)
+      .withPosition(0, 3)
       .getEntry();
+
+    arcadeDrive = shuffTab
+      .add("Arcade Drive", true) 
+      .withWidget(BuiltInWidgets.kToggleButton)
+      .withPosition(0, 2)
+      .getEntry();
+
+    hatchOpen = shuffTab
+      .add("HatchOpen", false) 
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(0, 1)
+      .getEntry();
+
+    hatchExtend = shuffTab
+      .add("HatchExtend", false) 
+      .withWidget(BuiltInWidgets.kBooleanBox)
+      .withPosition(0, 0)
+      .getEntry();  
+
+    CameraServer inst = CameraServer.getInstance();
+
+    usobo1 = new UsbCamera("Forward Cam", 0);
+    inst.addCamera(usobo1);
+    usobo2 = new UsbCamera("Other Cam", 1);
+    inst.addCamera(usobo2);
+
+    server = inst.addServer("serve_USB Camera 0");
+    server.setSource(usobo1);
+    server.getProperty("compression").set(-1);
+
+    shuffTab
+      .add("Forward Cam", usobo1)
+      .withWidget(BuiltInWidgets.kCameraStream)
+      .withPosition(1, 0)
+      .withSize(5, 4);  
+
+    // shuffTab
+    //   .add("Other Cam", usobo2)
+    //   .withWidget(BuiltInWidgets.kCameraStream)
+    //   .withPosition(6, 0)
+    //   .withSize(4, 4);
+
+    // CameraServer.getInstance().startAutomaticCapture("Forward Cam", 0);
+    // CameraServer.getInstance().startAutomaticCapture("Other Cam", 1);
 
     m_oi = new OI();
 
@@ -98,12 +159,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // if (collisionDetection.getBoolean(true)) {
-    //   getJerk();
-    //   if (collisionDetected) {
-    //     new SafeMode();
-    //   }
-    // }
+    if (collisionDetection.getBoolean(true)) {
+      getJerk();
+      if (collisionDetected) {
+        new SafeMode();
+      }
+    }
   }
 
   public void getJerk() {
@@ -116,10 +177,13 @@ public class Robot extends TimedRobot {
     currAccelY = ahrs.getWorldLinearAccelY();
     currentJerkY = currAccelY - lastAccelY;
     lastAccelY = currAccelY;
+    // System.out.println(currentJerkX);
+    // System.out.println(currentJerkY);
     
     if ( ( Math.abs(currentJerkX) > jerkThreshold ) ||
           ( Math.abs(currentJerkY) > jerkThreshold) ) {
         collisionDetected = true;
+        // System.out.println(collisionDetected);
     }
   }
 
@@ -150,6 +214,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    hatchLatch.reset();
+
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -166,15 +232,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    // Scheduler.getInstance().run();
+    teleopPeriodic();
   }
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
   }
 
   /**

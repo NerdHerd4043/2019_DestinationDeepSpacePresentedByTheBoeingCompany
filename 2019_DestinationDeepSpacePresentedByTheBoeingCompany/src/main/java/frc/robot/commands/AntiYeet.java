@@ -7,15 +7,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-
-public class Yeet extends Command {
-  double startTime = 0;
-
-  public Yeet() {
+public class AntiYeet extends Command {
+  public AntiYeet() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.cargoIntake);
   }
@@ -23,9 +19,7 @@ public class Yeet extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    // System.out.println("YEET");
-    Robot.cargoIntake.yeet();
-    startTime = Timer.getFPGATimestamp();
+    Robot.cargoIntake.antiYeet();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -36,20 +30,12 @@ public class Yeet extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    // System.out.println(Robot.cLimit.get());
-    if (Timer.getFPGATimestamp() > startTime + .25) {
-      return Robot.cLimit.get();
-    } else {
-      return false;
-    }
-    // return false;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    // System.out.println("stop yeet");
-    Timer.getFPGATimestamp();
     Robot.cargoIntake.stopYeet();
   }
 

@@ -24,4 +24,6 @@ public class RobotMap {
 
   // public static Solenoid cargoPos = new Solenoid(7, 8);
   public static Solenoid shifter = new Solenoid(7, 6);
+  public static Solenoid frontKvin = new Solenoid(7, 2);
+  public static Solenoid backKvin = new Solenoid(7, 3);
 }

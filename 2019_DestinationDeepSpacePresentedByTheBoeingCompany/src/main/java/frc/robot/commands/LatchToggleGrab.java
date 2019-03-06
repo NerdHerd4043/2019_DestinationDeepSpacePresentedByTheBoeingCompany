@@ -21,7 +21,7 @@ public class LatchToggleGrab extends Command {
   @Override
   protected void initialize() {
     Robot.hatchLatch.toggleState();
-    System.out.println("latch toggle");
+    // System.out.println("latch toggle");
   }
 
   // Called repeatedly when this Command is scheduled to run
