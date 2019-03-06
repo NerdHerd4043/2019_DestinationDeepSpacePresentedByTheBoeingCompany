@@ -12,7 +12,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
- * Add your docs here.
+ * Iain was here!
  */
 public class HatchLatch extends Subsystem {
   public boolean flase = false;

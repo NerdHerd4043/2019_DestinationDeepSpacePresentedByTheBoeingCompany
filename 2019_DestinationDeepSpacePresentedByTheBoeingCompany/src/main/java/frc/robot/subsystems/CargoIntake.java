@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.commands.TriggerYeet;
 
 
 /**
@@ -26,6 +27,10 @@ public class CargoIntake extends Subsystem {
 
   public void down() {
     // RobotMap.cargoPos.set(false);
+  }
+
+  public void triggerYeet(double value) {
+    RobotMap.cargoConv.set(-value);
   }
 
   public void antiYeet() {
@@ -56,6 +61,6 @@ public class CargoIntake extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new TriggerYeet());
   }
 }
