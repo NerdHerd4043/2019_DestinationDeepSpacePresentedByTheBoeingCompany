@@ -38,7 +38,7 @@ public class Yeet extends Command {
   protected boolean isFinished() {
     // System.out.println(Robot.cLimit.get());
     if (Timer.getFPGATimestamp() > startTime + .25) {
-      return !Robot.cLimit.get();
+      return Robot.cLimit.get();
     } else {
       return false;
     }
