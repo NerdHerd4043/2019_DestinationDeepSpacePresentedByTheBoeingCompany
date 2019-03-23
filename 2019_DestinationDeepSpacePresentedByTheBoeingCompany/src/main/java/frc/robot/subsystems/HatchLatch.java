@@ -15,9 +15,8 @@ import frc.robot.RobotMap;
  * Iain was here!
  */
 public class HatchLatch extends Subsystem {
-  public boolean flase = false;
   private boolean latchState = false;
-  private boolean latchLocation = flase;
+  private boolean latchLocation = false;
 
   public void toggleState() { 
     latchState = !latchState; 
