@@ -15,6 +15,8 @@ import edu.wpi.cscore.UsbCamera;
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;   
 
+import frc.robot.GripPipeline;;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -28,6 +30,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.SafeMode;
+
+import edu.wpi.first.wpilibj.vision.VisionRunner;
+import edu.wpi.first.wpilibj.vision.VisionThread;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -67,6 +72,15 @@ public class Robot extends TimedRobot {
 
   public static boolean collisionDetected;
   public static double jerkThreshold;
+
+
+  /* Vision Bullshit */
+  private VisionThread visionThread;
+  private static final int IMG_WIDTH = 320;
+  private static final int IMG_HEIGHT = 240;
+  private double centerX = 0.0;
+  private final Object imgLock = new Object();
+
 
   //ALWAYS INITIALIZE YOUR OI AFTER ALL THE OTHER SUBSYSTEMS
   public static OI m_oi;
@@ -121,6 +135,8 @@ public class Robot extends TimedRobot {
     CameraServer inst = CameraServer.getInstance();
 
     usobo1 = new UsbCamera("Forward Cam", 0);
+    usobo1.setExposureManual(20);
+    usobo1.setResolution(IMG_WIDTH, IMG_HEIGHT);
     inst.addCamera(usobo1);
     usobo2 = new UsbCamera("Other Cam", 1);
     inst.addCamera(usobo2);
@@ -128,6 +144,17 @@ public class Robot extends TimedRobot {
     server = inst.addServer("serve_USB Camera 0");
     server.setSource(usobo1);
     server.getProperty("compression").set(-1);
+
+    visionThread = new VisionThread(usobo1, new MyVisionPipeline(), pipeline -> {
+      if (!pipeline.filterContoursOutput().isEmpty()) {
+      Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+      synchronized (imgLock) {
+        centerX = r.x + (r.width / 2);
+      }
+      }
+    });
+    visionThread.start();
+
 
     shuffTab
       .add("Forward Cam", usobo1)
