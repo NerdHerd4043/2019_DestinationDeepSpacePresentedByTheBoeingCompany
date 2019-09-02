@@ -9,13 +9,16 @@ package frc.robot;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import org.opencv.core.Mat;
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 
 // import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 // import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;   
-
-import frc.robot.GripPipeline;;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -27,12 +30,10 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.GripPipeline;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.SafeMode;
-
-import edu.wpi.first.wpilibj.vision.VisionRunner;
-import edu.wpi.first.wpilibj.vision.VisionThread;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -62,6 +63,8 @@ public class Robot extends TimedRobot {
   public static UsbCamera usobo1;
   public static UsbCamera usobo2;
 
+  public static GripPipeline pipeline;
+
   public static double currAccelX;
   public static double lastAccelX;
   public static double currentJerkX;
@@ -75,10 +78,9 @@ public class Robot extends TimedRobot {
 
 
   /* Vision Bullshit */
-  private VisionThread visionThread;
   private static final int IMG_WIDTH = 320;
   private static final int IMG_HEIGHT = 240;
-  private double centerX = 0.0;
+  public static double centerX = 0.0;
   private final Object imgLock = new Object();
 
 
@@ -135,7 +137,7 @@ public class Robot extends TimedRobot {
     CameraServer inst = CameraServer.getInstance();
 
     usobo1 = new UsbCamera("Forward Cam", 0);
-    usobo1.setExposureManual(20);
+    usobo1.setExposureAuto();
     usobo1.setResolution(IMG_WIDTH, IMG_HEIGHT);
     inst.addCamera(usobo1);
     usobo2 = new UsbCamera("Other Cam", 1);
@@ -145,23 +147,29 @@ public class Robot extends TimedRobot {
     server.setSource(usobo1);
     server.getProperty("compression").set(-1);
 
-    visionThread = new VisionThread(usobo1, new MyVisionPipeline(), pipeline -> {
-      if (!pipeline.filterContoursOutput().isEmpty()) {
-      Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-      synchronized (imgLock) {
-        centerX = r.x + (r.width / 2);
-      }
-      }
-    });
-    visionThread.start();
-
-
     shuffTab
       .add("Forward Cam", usobo1)
       .withWidget(BuiltInWidgets.kCameraStream)
       .withPosition(1, 0)
       .withSize(5, 4);  
 
+    new Thread(() -> {
+      CvSink cvSink = inst.getVideo();
+
+      Mat source = new Mat();
+
+      while(!Thread.interrupted()) {
+        cvSink.grabFrame(source);
+
+        pipeline.process(source);
+
+        Rect r = Imgproc.boundingRect(pipeline.findContoursOutput().get(0));
+        
+        synchronized (imgLock) {
+          Robot.centerX = r.x + (r.width / 2);
+        }
+      }
+    }).start();
     // shuffTab
     //   .add("Other Cam", usobo2)
     //   .withWidget(BuiltInWidgets.kCameraStream)
@@ -241,6 +249,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     hatchLatch.reset();
+    usobo1.setExposureManual(20);
 
 
     /*
@@ -258,12 +267,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    // Scheduler.getInstance().run();
-    teleopPeriodic();
+    Scheduler.getInstance().run();
+
+
+    // teleopPeriodic();
   }
 
   @Override
   public void teleopInit() {
+    usobo1.setExposureAuto();
   }
 
   /**
