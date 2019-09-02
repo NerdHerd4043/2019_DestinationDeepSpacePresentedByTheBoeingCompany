@@ -35,6 +35,7 @@ import frc.robot.GripPipeline;
 import frc.robot.subsystems.*;
 import frc.robot.commands.SafeMode;
 
+import java.lang.Thread;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
   public static NetworkTableEntry arcadeDrive;
   public static NetworkTableEntry hatchExtend;
   public static NetworkTableEntry hatchOpen;
+  public static NetworkTableEntry cXEntry;
 
   public static CameraServer inst;
   public static MjpegServer server;
@@ -64,6 +66,7 @@ public class Robot extends TimedRobot {
   public static UsbCamera usobo2;
 
   public static GripPipeline pipeline;
+  public static Thread thread;
 
   public static double currAccelX;
   public static double lastAccelX;
@@ -137,15 +140,16 @@ public class Robot extends TimedRobot {
     CameraServer inst = CameraServer.getInstance();
 
     usobo1 = new UsbCamera("Forward Cam", 0);
-    usobo1.setExposureAuto();
     usobo1.setResolution(IMG_WIDTH, IMG_HEIGHT);
+    usobo1.setExposureAuto();
     inst.addCamera(usobo1);
     usobo2 = new UsbCamera("Other Cam", 1);
+    usobo2.setExposureManual(0);
     inst.addCamera(usobo2);
-
+    
     server = inst.addServer("serve_USB Camera 0");
     server.setSource(usobo1);
-    server.getProperty("compression").set(-1);
+    server.setCompression(-1);
 
     shuffTab
       .add("Forward Cam", usobo1)
@@ -153,7 +157,12 @@ public class Robot extends TimedRobot {
       .withPosition(1, 0)
       .withSize(5, 4);  
 
-    new Thread(() -> {
+    cXEntry = shuffTab
+      .add("Center X", centerX)
+      .withWidget(BuiltInWidgets.kNumberBar)
+      .getEntry();
+      
+    thread = new Thread(() -> {
       CvSink cvSink = inst.getVideo();
 
       Mat source = new Mat();
@@ -162,21 +171,25 @@ public class Robot extends TimedRobot {
         cvSink.grabFrame(source);
 
         pipeline.process(source);
-
-        Rect r = Imgproc.boundingRect(pipeline.findContoursOutput().get(0));
         
-        synchronized (imgLock) {
-          Robot.centerX = r.x + (r.width / 2);
+        if (!pipeline.findContoursOutput().isEmpty()) {
+          Rect r = Imgproc.boundingRect(pipeline.findContoursOutput().get(0));
+        
+          synchronized (imgLock) {
+            Robot.centerX = r.x + (r.width / 2);
+            Robot.cXEntry.setNumber(Robot.centerX);
+          }
         }
       }
-    }).start();
+    });
+
     // shuffTab
     //   .add("Other Cam", usobo2)
     //   .withWidget(BuiltInWidgets.kCameraStream)
     //   .withPosition(6, 0)
     //   .withSize(4, 4);
 
-    // CameraServer.getInstance().startAutomaticCapture("Forward Cam", 0);
+    // CameraServer.getInstance().stSartAutomaticCapture("Forward Cam", 0);
     // CameraServer.getInstance().startAutomaticCapture("Other Cam", 1);
 
     m_oi = new OI();
@@ -228,6 +241,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    thread.interrupt();
+    server.setSource(usobo1);
   }
 
   @Override
@@ -249,7 +264,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     hatchLatch.reset();
-    usobo1.setExposureManual(20);
+    server.setSource(usobo2);
+    thread.start();
 
 
     /*
@@ -275,7 +291,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    usobo1.setExposureAuto();
+    thread.interrupt();
+    server.setSource(usobo1);
   }
 
   /**
