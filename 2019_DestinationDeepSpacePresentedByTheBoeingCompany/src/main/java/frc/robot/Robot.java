@@ -121,6 +121,7 @@ public class Robot extends TimedRobot {
     CameraServer inst = CameraServer.getInstance();
 
     usobo1 = new UsbCamera("Forward Cam", 0);
+    usobo1.setExposureAuto();
     inst.addCamera(usobo1);
     usobo2 = new UsbCamera("Other Cam", 1);
     inst.addCamera(usobo2);
