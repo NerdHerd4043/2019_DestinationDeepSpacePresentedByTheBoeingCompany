@@ -98,7 +98,7 @@ public class Robot extends TimedRobot {
       .add("Collision Detection", false)
       .withWidget(BuiltInWidgets.kToggleButton)
       .withPosition(0, 3)
-      .getEntry();
+      .getEntry();  
 
     arcadeDrive = shuffTab
       .add("Arcade Drive", true) 

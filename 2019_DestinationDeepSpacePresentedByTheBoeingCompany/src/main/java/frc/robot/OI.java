@@ -58,7 +58,7 @@ public class OI {
   Button CIn = new JoystickButton(driveStick, 1);
   Button COut = new JoystickButton(driveStick, 2); 
 
-  Button FrontKvin = new JoystickButton(driveStick, 7); 
+  // Button HatchSpamBtn = new JoystickButton(driveStick, 7); 
   Button BackKvin = new JoystickButton(driveStick, 8); 
 
   Button CameraToggle = new JoystickButton(driveStick, 10);
@@ -71,7 +71,7 @@ public class OI {
     AntiShiftBtn.whenPressed(new AntiShift());
     CIn.toggleWhenPressed(new Yeet());
     COut.toggleWhenPressed(new AntiYeet());
-    FrontKvin.toggleWhenPressed(new FrontKvinToggle());
+    // HatchSpamBtn.toggleWhenPressed(new HatchSpam());
     BackKvin.toggleWhenPressed(new BackKvinToggle());
   }
 
