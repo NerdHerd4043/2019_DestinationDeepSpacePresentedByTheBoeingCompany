@@ -29,8 +29,8 @@ public class CargoIntake extends Subsystem {
     // RobotMap.cargoPos.set(false);
   }
 
-  public void triggerYeet(double value) {
-    RobotMap.cargoConv.set(-value);
+  public void triggerYeet(double rightTrigger, double leftTrigger) {
+    RobotMap.cargoConv.set(rightTrigger - leftTrigger);
   }
 
   public void antiYeet() {
