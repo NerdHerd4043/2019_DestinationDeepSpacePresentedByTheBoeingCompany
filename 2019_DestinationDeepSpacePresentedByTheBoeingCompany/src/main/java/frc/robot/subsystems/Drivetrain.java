@@ -38,23 +38,14 @@ public class Drivetrain extends Subsystem {
   }
 
   public void drive(Joystick joy) {
-    if (Robot.arcadeDrive.getBoolean(true)) {
-      inputSpeed = -joy.getRawAxis(1);
-      inputTurn = joy.getRawAxis(4);
-    } else {
-      inputSpeed = -joy.getRawAxis(1);
-      inputTurn = -joy.getRawAxis(5);
-    }
+    inputSpeed = -joy.getRawAxis(1);
+    inputTurn = joy.getRawAxis(4);
 
     drive(inputSpeed, inputTurn);
   }
 
   public void drive(double speed, double turn) {
-    if (Robot.arcadeDrive.getBoolean(true)) {
-      diffDrive.arcadeDrive(speed, turn, true);
-    } else {
-      diffDrive.tankDrive(speed, turn, true);
-    }
+      diffDrive.curvatureDrive(speed, turn, Robot.m_oi.getDrivestick().getRawButton(9));
   }
 
   public void shift() {
