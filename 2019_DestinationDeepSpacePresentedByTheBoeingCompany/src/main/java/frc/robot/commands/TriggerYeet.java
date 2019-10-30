@@ -25,7 +25,8 @@ public class TriggerYeet extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.cargoIntake.triggerYeet(Robot.m_oi.getDrivestick().getRawAxis(3));
+    Robot.cargoIntake.triggerYeet(Robot.m_oi.getDrivestick().getRawAxis(3),
+                                  Robot.m_oi.getDrivestick().getRawAxis(2));
   }
 
   // Make this return true when this Command no longer needs to run execute()
